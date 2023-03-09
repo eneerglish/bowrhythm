@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class enemys : MonoBehaviour
 {
-    [SerializeField] private float speed = 5;
+    private float speed = 20;
     private float move;
     private GameManger gamemanger;
+    private fadein main_fadein;
+
+    private float spawn_time;
+    private float perfect_time;
     // Start is called before the first frame update
     void Start()
     {
+        main_fadein = GameObject.Find("Panel").GetComponent<fadein>();
         gamemanger = GameObject.Find("gamemanager").GetComponent<GameManger>();
     }
 
@@ -20,10 +25,17 @@ public class enemys : MonoBehaviour
         if(move < 0)
         {
             transform.position = new Vector2(transform.position.x, move);
+            spawn_time = Time.time;
         }
         else
         {
             transform.position = new Vector2(transform.position.x, 0);
+            
+            if(Time.time > spawn_time + 0.5f)
+            {
+                Debug.Log("ゲームオーバー");
+                main_fadein.gameover = true;
+            }
         }
 
         if(Input.GetMouseButtonDown(0))
